@@ -3,34 +3,12 @@ body,
 .app-container {
   background: linear-gradient(
     90deg,
-    #a8f4e0 0%,
-    /* Gauche - vert cyan clair */ #a8f4e0 38%,
-    /* Fin de la partie gauche */ #92e4f0 42%,
-    /* Début du dégradé bleu */ #7fd4f5 65%,
-    /* Bleu moyen */ #6ec4f8 100% /* Bleu plus foncé à droite */
+    #92e4f0 0%,
+    /* Gauche - vert cyan clair */ #a8f4e0 40%,
+    /* Fin de la partie gauche */ #92e4f0 55%,
+    /* Début du dégradé bleu */ #7fd4f5 60% /* Bleu moyen */
   );
   min-height: 100vh;
-}
-
-/* Ou si tu veux un dégradé plus doux comme dans l'image */
-.app-container {
-  background: linear-gradient(
-    to right,
-    #99f0df 0%,
-    #99f0df 38%,
-    #81d8f7 38%,
-    #4eb8f0 55%,
-    #2a9be0 100%
-  );
-}
-
-.agenda-sidebar {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(8px);
-}
-
-.today-card {
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  margin: 0;
+  padding: 0;
 }

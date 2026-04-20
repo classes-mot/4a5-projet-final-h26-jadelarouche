@@ -1,0 +1,29 @@
+form {
+  width: 90%;
+  max-width: 40rem;
+  margin: 3rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.5);
+}
+
+.control,
+fieldset {
+  margin-bottom: 1rem;
+  padding-right: 1rem;
+}
+
+.control.no-margin {
+  margin-bottom: 0;
+  padding-right: 1rem;
+}
+
+.control label {
+  display: block;
+  font-size: 0.8rem;
+  margin-bottom: 0.2rem;
+  color: #2c3a34;
+  text-transform: uppercase;
+  font-weight: bold;
+}
