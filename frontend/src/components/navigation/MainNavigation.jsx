@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { AuthContext } from "../context/auth-context";
-import { Link } from "react-router-dom";
 import NavLinks from "./NavLinks";
 import "./MainNavigation.css";
 import SideDrawer from "./SideDrawer";
@@ -9,16 +7,13 @@ import Backdrop from "./Backdrop";
 const MainNavigation = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const openDrawerHandler = () => setDrawerOpen(true);
-  const closeDrawerHandler = () => setDrawerOpen(false);
-
   return (
     <>
-      {drawerOpen && <Backdrop onClick={closeDrawerHandler} />}
+      {drawerOpen && <Backdrop onClick={() => setDrawerOpen(false)} />}
       {drawerOpen && (
-        <SideDrawer onClose={closeDrawerHandler}>
+        <SideDrawer onClose={() => setDrawerOpen(false)}>
           <nav className="main-nav_drawer">
-            <NavLinks pnLinkClick={closeDrawerHandler} />
+            <NavLinks />
           </nav>
         </SideDrawer>
       )}
@@ -30,7 +25,7 @@ const MainNavigation = () => {
             <NavLinks />
           </nav>
 
-          <button className="menu-btn" onClick={openDrawerHandler}>
+          <button className="menu-btn" onClick={() => setDrawerOpen(true)}>
             <span />
             <span />
             <span />

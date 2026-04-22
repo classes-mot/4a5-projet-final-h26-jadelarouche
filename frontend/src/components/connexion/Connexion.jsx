@@ -47,12 +47,12 @@ export default function Connexion() {
     }
   };
   return (
-    <form onSubmit={authSubmitHandler}>
-      <h2>Connexion</h2>
-      {error && <p className="control-error">{error}</p>}
+    <div className="connexion-wrapper">
+      <form onSubmit={authSubmitHandler} className="connexion-form">
+        <h2>Connexion</h2>
+        {error && <p className="control-error">{error}</p>}
 
-      <div className="control-row">
-        <div className="control no-margin">
+        <div className="control-row">
           <label htmlFor="email">Email</label>
           <input
             type="email"
@@ -64,7 +64,7 @@ export default function Connexion() {
           />
         </div>
 
-        <div className="control no-margin">
+        <div className="control-row">
           <label htmlFor="password">Mot de passe</label>
           <input
             type="password"
@@ -77,16 +77,13 @@ export default function Connexion() {
             required
           />
         </div>
-      </div>
 
-      <p className="form-actions">
-        <Link to="/inscription">
-          <button className="button button-flat">S'inscrire</button>
-        </Link>
-        <button type="submit" className="button">
-          Se connecter
-        </button>
-      </p>
-    </form>
+        <div className="form-actions">
+          <button type="submit" className="btn-connexion">
+            Se connecter
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }

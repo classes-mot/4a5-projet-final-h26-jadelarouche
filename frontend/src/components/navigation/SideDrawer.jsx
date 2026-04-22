@@ -2,11 +2,10 @@ import "./SideDrawer.css";
 
 const SideDrawer = ({ children, onClose }) => {
   return (
-    <div className="side-drawer" onClick={onClose}>
-      <div className="side-drawer-content" onClick={(e) => e.stopPropagation()}>
-        {children}
-      </div>
-    </div>
+    <>
+      <div className="side-drawer-overlay" onClick={onClose} />
+      <div className="side-drawer-content">{children}</div>
+    </>
   );
 };
 
