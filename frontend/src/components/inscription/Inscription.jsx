@@ -6,8 +6,7 @@ export default function Inscription() {
   const [passwordAreNotEqual, setPasswordAreNotEqual] = useState(false);
 
   function handleSubmit(e) {
-    event.preventDefault();
-
+    e.preventDefault();
     const fd = new FormData(e.target);
     const data = Object.fromEntries(fd.entries());
 
@@ -31,51 +30,42 @@ export default function Inscription() {
 
     users.push(newUser);
     localStorage.setItem("users", JSON.stringify(users));
-
-    console.log("Utilisateur inscrit :", newUser);
-    event.target.reset();
+    e.target.reset();
+    setPasswordAreNotEqual(false);
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h1>Inscription</h1>
+    <div className="inscription-wrapper">
+      <form onSubmit={handleSubmit} className="inscription-form">
+        <h2>Inscription</h2>
 
-      <div className="control-row">
-        <div className="control">
-          <label htmlFor="email">Courriel</label>
-          <input type="email" id="email" name="email" required />
-        </div>
-        <div className="control">
-          <label htmlFor="confirm-password">Confirmer le mot de passe</label>
-          <input
-            id="confirm-password"
-            type="password"
-            name="confirm-password"
-            required
-          />
-          {passwordAreNotEqual ? (
-            <div className="control-error">
-              <p>Le mot de passe doit être identique.</p>
-            </div>
-          ) : null}
-        </div>
-      </div>
-
-      <div className="control row">
-        <div className="control">
+        <div className="control-row">
           <label htmlFor="username">Nom d'utilisateur</label>
           <input id="username" type="text" name="username" required />
         </div>
-      </div>
 
-      <p className="form-actions">
-        <Link to="/login">
-          <button className="button button-flat">Se connecter</button>
-        </Link>
-        <button type="submit" className="button">
-          S'inscrire
-        </button>
-      </p>
-    </form>
+        <div className="control-row">
+          <label htmlFor="email">Adresse courriel</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+
+        <div className="control-row">
+          <label htmlFor="password">Mot de passe</label>
+          <input id="password" type="password" name="password" required />
+        </div>
+
+        {passwordAreNotEqual && (
+          <p className="control-error">
+            Les mots de passe ne sont pas identiques.
+          </p>
+        )}
+
+        <div className="form-actions">
+          <button type="submit" className="btn-inscription">
+            S'inscrire
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }
