@@ -54,6 +54,7 @@
 .task-form-actions {
   display: flex;
   justify-content: center;
+  gap: 1rem;
   margin-top: 1.8rem;
 }
 
@@ -71,4 +72,19 @@
 
 .btn-task:hover {
   background-color: #7dd3d8;
+}
+
+.btn-annuler {
+  background: #f1f5f9;
+  color: #555;
+  border: none;
+  border-radius: 999px;
+  padding: 0.6rem 2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-annuler:hover {
+  background: #e2e8f0;
 }

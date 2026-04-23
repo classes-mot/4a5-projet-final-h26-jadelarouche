@@ -5,47 +5,116 @@
 
 /*SIDEBAR*/
 .sidebar {
-  width: 240px;
+  width: 220px;
+  min-width: 220px;
   background-color: #a1e4e8;
   padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.sidebar h2 {
+.sidebar-title {
   font-size: 1.4rem;
-  margin-bottom: 1.5rem;
   color: #1e3a5f;
-}
-
-.sidebar ul {
-  list-style: none;
-  padding: 0;
+  font-weight: 700;
   margin: 0;
 }
 
-.sidebar li {
-  padding: 12px 15px;
-  margin-bottom: 8px;
-  border-radius: 8px;
+.btn-nouvelle-tache {
+  background: white;
+  color: #0e7490;
+  border: none;
+  border-radius: 999px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.btn-nouvelle-tache:hover {
+  background: #e0f7fa;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.sidebar-nav-item {
+  padding: 10px 14px;
+  border-radius: 10px;
   cursor: pointer;
   font-weight: 500;
   color: #1e3a5f;
-  transition: all 0.3s;
+  transition: all 0.2s;
 }
 
-.sidebar li:hover,
-.sidebar li.active {
-  background-color: white;
-  color: #1e3a5f;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+.sidebar-nav-item:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.sidebar-nav-item.active {
+  background: white;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 /*CONTENU MAIN*/
 .main-content {
   flex: 1;
   padding: 2rem;
+  overflow-x: auto;
+}
+
+.days-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.days-container.semaine-layout {
+  flex-direction: row;
   align-items: flex-start;
+  gap: 2rem;
+  padding-bottom: 2rem;
+}
+
+.day-column {
+  min-width: 260px;
+  flex: 1;
+}
+
+.day-title {
+  font-size: 1.1rem;
+  color: #1e3a5f;
+  margin-bottom: 1.2rem;
+  font-weight: 600;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+  white-space: nowrap;
+}
+
+.task-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.semaine-layout .task-grid {
+  flex-direction: column;
+}
+
+.no-tasks {
+  color: #aaa;
+  font-size: 0.9rem;
+  font-size: italic;
 }
 
 .today-card {
