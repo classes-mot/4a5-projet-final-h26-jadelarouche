@@ -30,7 +30,7 @@ const formatDayLabel = (dateStr) => {
 };
 
 const Accueil = () => {
-  const [view, setView] = useState("Aujourd'hui");
+  const [view, setView] = useState("aujourdhui");
   const [showForm, setShowForm] = useState(false);
   const [taskToEdit, setTaskToedit] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -90,15 +90,8 @@ const Accueil = () => {
   const today = getToday();
   const weekDates = getWeekDates();
 
-  const displayedTasks =
-    view === "aujourd'hui"
-      ? tasks
-          .filter((task) => task.date === today)
-          .sort((a, b) => a.heureDebut.localeCompare(b.heureDebut))
-      : tasks;
-
   const filteredByDay =
-    view === "aujourd'hui"
+    view === "aujourdhui"
       ? { [today]: tasks.filter((t) => t.date === today) }
       : weekDates.reduce((acc, d) => {
           acc[d] = tasks.filter((t) => t.date === d);
