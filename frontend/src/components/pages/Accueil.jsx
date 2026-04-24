@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import "./Accueil.css";
 import Task from "../task/Task";
 import Modal from "../context/Modal";
 import TaskForm from "../taskForm/TaskForm";
+import { AuthContext } from "../context/auth-context";
 
 const getToday = () => new Date().toISOString().split("T")[0];
 
@@ -30,6 +31,7 @@ const formatDayLabel = (dateStr) => {
 };
 
 const Accueil = () => {
+  const { isLoggedIn } = useContext(AuthContext);
   const [view, setView] = useState("aujourdhui");
   const [showForm, setShowForm] = useState(false);
   const [taskToEdit, setTaskToedit] = useState(null);
@@ -111,13 +113,18 @@ const Accueil = () => {
       <div className="accueil-container">
         <div className="sidebar">
           <h2 className="sidebar-title">Agenda</h2>
-          <button className="btn-nouvelle-tache" onClick={handleNouvelleClick}>
-            Nouvelle Tâche
-          </button>
+          {isLoggedIn && (
+            <button
+              className="btn-nouvelle-tache"
+              onClick={handleNouvelleClick}
+            >
+              Nouvelle Tâche
+            </button>
+          )}
 
           <nav className="sidebar-nav">
             <div
-              className={`sidebar-nav-item ${view === "aujourd'hui" ? "active" : ""}`}
+              className={`sidebar-nav-item ${view === "aujourdhui" ? "active" : ""}`}
               onClick={() => {
                 setView("aujourdhui");
               }}
@@ -162,7 +169,7 @@ const Accueil = () => {
                           key={task.id}
                           task={task}
                           onModifier={handleModifier}
-                          onSuppriner={handleSupprimerClick}
+                          onSupprimer={handleSupprimerClick}
                         />
                       ))
                     )}

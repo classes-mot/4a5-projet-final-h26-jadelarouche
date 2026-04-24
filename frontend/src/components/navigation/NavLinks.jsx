@@ -4,11 +4,11 @@ import { useContext } from "react";
 import { AuthContext } from "../context/auth-context";
 
 const NavLinks = () => {
-  const auth = useContext(AuthContext);
+  const { isLoggedIn, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    auth.logout();
+    logout();
     localStorage.removeItem("isLoggedIn");
     localStorage.removeItem("currentUser");
     navigate("/accueil");
@@ -25,7 +25,7 @@ const NavLinks = () => {
         </NavLink>
       </li>
 
-      {auth.isLoggedIn ? (
+      {isLoggedIn ? (
         <>
           <li>
             <NavLink

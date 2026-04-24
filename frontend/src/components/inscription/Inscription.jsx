@@ -54,6 +54,16 @@ export default function Inscription() {
           <input id="password" type="password" name="password" required />
         </div>
 
+        <div className="control-row">
+          <label htmlFor="confirmPassword">Confirmation mot de passe</label>
+          <input
+            id="confirmPassword"
+            type="password"
+            name="confirmPassword"
+            required
+          />
+        </div>
+
         {passwordAreNotEqual && (
           <p className="control-error">
             Les mots de passe ne sont pas identiques.
