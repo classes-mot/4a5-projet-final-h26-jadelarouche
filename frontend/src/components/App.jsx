@@ -3,14 +3,13 @@ import { useState } from "react";
 import { AuthContext } from "./context/auth-context";
 
 import Root from "./containers/Roots";
-import Auth from "./containers/Auth";
+import RequiredAuth from "./navigation/RequiredAuth";
 
 import ErreurPage from "./pages/ErreurPage";
 import Accueil from "./pages/Accueil";
 import Connexion from "./connexion/Connexion";
 import Inscription from "./inscription/Inscription";
 import TaskForm from "./taskForm/TaskForm";
-import RequiredAuth from "./navigation/RequiredAuth";
 
 import "./App.css";
 
@@ -24,8 +23,15 @@ const router = createBrowserRouter([
       { path: "accueil", element: <Accueil /> },
       { path: "/connexion", element: <Connexion /> },
       { path: "/inscription", element: <Inscription /> },
-      { path: "/add", element: <TaskForm /> },
-      { path: "/edit/:id", element: <TaskForm /> },
+
+      // Routes PROTÉGÉES
+      {
+        element: <RequiredAuth />,
+        children: [
+          { path: "/add", element: <TaskForm /> },
+          { path: "/edit/:id", element: <TaskForm /> },
+        ],
+      },
     ],
   },
 ]);

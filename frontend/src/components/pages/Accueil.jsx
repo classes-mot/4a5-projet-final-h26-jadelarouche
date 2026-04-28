@@ -1,69 +1,69 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import "./Accueil.css";
-import Task from "../task/Task";
 import Modal from "../context/Modal";
 import TaskForm from "../taskForm/TaskForm";
+import TaskList from "../taskList/TaskList";
 import { AuthContext } from "../context/auth-context";
 
-const getToday = () => new Date().toISOString().split("T")[0];
-
-const getWeekDates = () => {
-  const today = new Date();
-  const day = today.getDay();
-  const monday = new Date(today);
-  monday.setDate(today.getDate() - (day === 0 ? 6 : day - 1));
-  return Array.from({ length: 7 }, (_, i) => {
-    const d = new Date(monday);
-    d.setDate(monday.getDate() + i);
-    return d.toISOString().split("T")[0];
-  });
-};
-
-const formatDayLabel = (dateStr) => {
-  const date = new Date(dateStr + "T00:00:00");
-  const today = getToday();
-  if (dateStr === today) return "Aujourd'hui";
-  return date.toLocaleDateString("fr-CA", {
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-  });
-};
-
 const Accueil = () => {
-  const { isLoggedIn } = useContext(AuthContext);
+  const { isLoggedIn, user } = useContext(AuthContext);
   const [view, setView] = useState("aujourdhui");
   const [showForm, setShowForm] = useState(false);
   const [taskToEdit, setTaskToedit] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState(null);
+  const [tasks, setTasks] = useState([]);
 
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      description: "Web et base de données",
-      date: getToday(),
-      heureDebut: "8:00",
-      heureFin: "9:45",
-    },
-    {
-      id: 2,
-      description: "Environnement Client/Serveur",
-      date: getToday(),
-      heureDebut: "9:50",
-      heureFin: "10:45",
-    },
-  ]);
+  //Utilisation d'un ref
+  const isInitialized = useRef(false);
+
+  // Charger les tâches quand l'utilisateur change (login/logout)
+  useEffect(() => {
+    if (!isLoggedIn || !user?.email) {
+      setTasks([]);
+      isInitialized.current = false;
+      return;
+    }
+
+    const key = `tasks_${user.email}`;
+    try {
+      const saved = localStorage.getItem(key);
+      const parsed = saved ? JSON.parse(saved) : [];
+
+      console.log(`Tâches chargées depuis localStorage`);
+      console.table(parsed);
+
+      setTasks(parsed);
+      isInitialized.current = true;
+    } catch (e) {
+      console.error("Erreur lors du chargement des tâches :", e);
+      setTasks([]);
+    }
+  }, [isLoggedIn, user?.email]);
+
+  // Sauvegarder les tâches dans localStorage à chaque modification
+  useEffect(() => {
+    if (!isLoggedIn || !user?.email || !isInitialized.current) return;
+
+    // Protection ne pas sauvegarder si le tableau est vide
+    if (tasks.length === 0) {
+      console.log("Sauvegarde ignorée");
+      return;
+    }
+
+    const key = `tasks_${user.email}`;
+    try {
+      localStorage.setItem(key, JSON.stringify(tasks));
+      console.log(`Sauvegarde effectué`);
+    } catch (e) {
+      console.error("Erreur lors de la sauvegarde des tâches :", e);
+    }
+  }, [tasks, isLoggedIn, user?.email]);
 
   const handleAjouter = (formValues) => {
-    if (taskToEdit) {
-      setTasks((prev) =>
-        prev.map((t) => (t.id === taskToEdit.id ? { ...t, ...formValues } : t)),
-      );
-      setTaskToedit(null);
-    } else {
-      setTasks((prev) => [...prev, { id: Date.now(), ...formValues }]);
-    }
+    console.log("Ajout tache");
+    const newTask = { id: Date.now(), ...formValues };
+    setTasks((prev) => [...prev, newTask]);
     setShowForm(false);
   };
 
@@ -87,18 +87,6 @@ const Accueil = () => {
     setTaskToedit(null);
     setShowForm(true);
   };
-
-  // Filtrage selon la vue
-  const today = getToday();
-  const weekDates = getWeekDates();
-
-  const filteredByDay =
-    view === "aujourdhui"
-      ? { [today]: tasks.filter((t) => t.date === today) }
-      : weekDates.reduce((acc, d) => {
-          acc[d] = tasks.filter((t) => t.date === d);
-          return acc;
-        }, {});
 
   return (
     <>
@@ -125,17 +113,13 @@ const Accueil = () => {
           <nav className="sidebar-nav">
             <div
               className={`sidebar-nav-item ${view === "aujourdhui" ? "active" : ""}`}
-              onClick={() => {
-                setView("aujourdhui");
-              }}
+              onClick={() => setView("aujourdhui")}
             >
               Aujourd'hui
             </div>
             <div
               className={`sidebar-nav-item ${view === "semaine" ? "active" : ""}`}
-              onClick={() => {
-                setView("semaine");
-              }}
+              onClick={() => setView("semaine")}
             >
               Semaine
             </div>
@@ -154,29 +138,12 @@ const Accueil = () => {
               }}
             />
           ) : (
-            <div
-              className={`days-container ${view === "semaine" ? "semaine-layout" : ""}`}
-            >
-              {Object.entries(filteredByDay).map(([date, dayTasks]) => (
-                <div key={date} className="day-column">
-                  <h2 className="day-title">{formatDayLabel(date)}</h2>
-                  <div className="task-grid">
-                    {dayTasks.length === 0 ? (
-                      <p className="no-tasks">Aucune tâche</p>
-                    ) : (
-                      dayTasks.map((task) => (
-                        <Task
-                          key={task.id}
-                          task={task}
-                          onModifier={handleModifier}
-                          onSupprimer={handleSupprimerClick}
-                        />
-                      ))
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <TaskList
+              tasks={tasks}
+              view={view}
+              onModifier={handleModifier}
+              onSupprimer={handleSupprimerClick}
+            />
           )}
         </div>
       </div>

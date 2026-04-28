@@ -1,7 +1,6 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Connexion.css";
-import { Link } from "react-router-dom";
 import { AuthContext } from "../context/auth-context";
 
 export default function Connexion() {
@@ -37,7 +36,6 @@ export default function Connexion() {
     if (foundUser) {
       // Connexion réussie
       auth.login(foundUser);
-      localStorage.setItem("isLoggedIn", "true");
 
       setError("");
       navigate("/");
@@ -83,6 +81,13 @@ export default function Connexion() {
             Se connecter
           </button>
         </div>
+
+        <p>
+          Pas encore de compte?{" "}
+          <a href="/inscription" style={{ color: "#4a90e2" }}>
+            S'inscrire
+          </a>
+        </p>
       </form>
     </div>
   );
