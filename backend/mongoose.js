@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
-const uri = "mongodb://localhost:27017/nextHourDB";
+const MONGODB_URI =
+  process.env.MONGODB_URI || "mongodb://localhost:27017/nextHourDB";
 
 mongoose
   .connect(uri)

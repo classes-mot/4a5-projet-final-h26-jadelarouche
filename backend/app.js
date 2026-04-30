@@ -2,6 +2,7 @@ import express from "express";
 import connectDB from "./util/db.js";
 import userRoutes from "./routes/usersRoutes.js";
 import tacheRoutes from "./routes/tachesRoutes.js";
+import "dotenv/config";
 
 // Middleware pour passer le JSON
 const app = express();
@@ -20,7 +21,7 @@ app.use("*", (req, res) => {
 });
 
 //Démarrage du serveur
-const port = 5000;
+const PORT = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`Server démarré sur le port ${port}`);
 });
