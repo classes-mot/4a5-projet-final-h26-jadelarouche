@@ -16,7 +16,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/taches", tacheRoutes);
 
 // Gestion des routes non trouvées
-app.use("*", (req, res) => {
+app.use("/{*path}", (req, res) => {
   res.status(404).json({ message: "Route non trouvée" });
 });
 
