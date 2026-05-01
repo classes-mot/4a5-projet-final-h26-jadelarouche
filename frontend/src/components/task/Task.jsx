@@ -1,10 +1,11 @@
 import { useContext } from "react";
 import { AuthContext } from "../context/auth-context";
+import { useTranslation } from "react-i18next";
 import "./Task.css";
 
 const Task = ({ task, onModifier, onSupprimer }) => {
   const { isLoggedIn } = useContext(AuthContext);
-
+  const { t } = useTranslation();
   return (
     <div className="task-card">
       <h3 className="task-title">{task.description}</h3>
@@ -17,13 +18,13 @@ const Task = ({ task, onModifier, onSupprimer }) => {
       {isLoggedIn && (
         <div className="task-actions">
           <button className="btn-modifier" onClick={() => onModifier(task)}>
-            Modifier
+            {t("task.modifier")}
           </button>
           <button
             className="btn-supprimer"
             onClick={() => onSupprimer(task.id)}
           >
-            Supprimer
+            {t("task.supprimer")}
           </button>
         </div>
       )}

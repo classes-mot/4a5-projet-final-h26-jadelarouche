@@ -2,10 +2,12 @@ import { NavLink, useNavigate } from "react-router-dom";
 import "./NavLinks.css";
 import { useContext } from "react";
 import { AuthContext } from "../context/auth-context";
+import { useTranslation } from "react-i18next";
 
 const NavLinks = () => {
   const { isLoggedIn, logout } = useContext(AuthContext);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleLogout = () => {
     logout();
@@ -21,7 +23,7 @@ const NavLinks = () => {
           to="/accueil"
           className={({ isActive }) => (isActive ? "active" : "")}
         >
-          Accueil{" "}
+          {t("navigation.accueil")}{" "}
         </NavLink>
       </li>
 
@@ -33,7 +35,7 @@ const NavLinks = () => {
               onClick={handleLogout}
               className={({ isActive }) => (isActive ? "active" : "")}
             >
-              Déconnexion
+              {t("navigation.deconnexion")}
             </NavLink>
           </li>
         </>
@@ -44,7 +46,7 @@ const NavLinks = () => {
               to="/connexion"
               className={({ isActive }) => (isActive ? "active" : "")}
             >
-              Connexion
+              {t("navigation.connexion")}
             </NavLink>
           </li>
           <li>
@@ -52,7 +54,7 @@ const NavLinks = () => {
               to="/inscription"
               className={({ isActive }) => (isActive ? "active" : "")}
             >
-              Inscription
+              {t("navigation.inscription")}
             </NavLink>
           </li>
         </>

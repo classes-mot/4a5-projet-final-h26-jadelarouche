@@ -4,8 +4,10 @@ import Modal from "../context/Modal";
 import TaskForm from "../taskForm/TaskForm";
 import TaskList from "../taskList/TaskList";
 import { AuthContext } from "../context/auth-context";
+import { useTranslation } from "react-i18next";
 
 const Accueil = () => {
+  const { t } = useTranslation();
   const { isLoggedIn, user } = useContext(AuthContext);
   const [view, setView] = useState("aujourdhui");
   const [showForm, setShowForm] = useState(false);
@@ -94,19 +96,19 @@ const Accueil = () => {
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         onConfirm={handleConfirmDelete}
-        title="Supprimer la tâche"
-        message="Voulez-vous vraiment supprimer cette tâche?"
+        title={t("modal.titre")}
+        message={t("modal.message")}
       />
 
       <div className="accueil-container">
         <div className="sidebar">
-          <h2 className="sidebar-title">Agenda</h2>
+          <h2 className="sidebar-title">{t("accueil.titre")}</h2>
           {isLoggedIn && (
             <button
               className="btn-nouvelle-tache"
               onClick={handleNouvelleClick}
             >
-              Nouvelle Tâche
+              {t("accueil.nouvelleTache")}
             </button>
           )}
 
@@ -115,13 +117,13 @@ const Accueil = () => {
               className={`sidebar-nav-item ${view === "aujourdhui" ? "active" : ""}`}
               onClick={() => setView("aujourdhui")}
             >
-              Aujourd'hui
+              {t("accueil.aujourdhui")}
             </div>
             <div
               className={`sidebar-nav-item ${view === "semaine" ? "active" : ""}`}
               onClick={() => setView("semaine")}
             >
-              Semaine
+              {t("accueil.semaine")}
             </div>
           </nav>
         </div>

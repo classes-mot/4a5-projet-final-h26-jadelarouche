@@ -1,9 +1,11 @@
 import { useState } from "react";
 import "./Inscription.css";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function Inscription() {
   const [passwordAreNotEqual, setPasswordAreNotEqual] = useState(false);
+  const { t } = useTranslation();
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -18,7 +20,7 @@ export default function Inscription() {
     const users = JSON.parse(localStorage.getItem("users")) || [];
 
     if (users.some((user) => user.email === data.email)) {
-      alert("Cet emai; est déjà utilisée.");
+      alert(t("inscription.erreurEmail"));
       return;
     }
 
@@ -37,25 +39,27 @@ export default function Inscription() {
   return (
     <div className="inscription-wrapper">
       <form onSubmit={handleSubmit} className="inscription-form">
-        <h2>Inscription</h2>
+        <h2>{t("inscription.titre")}</h2>
 
         <div className="control-row">
-          <label htmlFor="username">Nom d'utilisateur</label>
+          <label htmlFor="username">{t("inscription.nomUtilisateur")}</label>
           <input id="username" type="text" name="username" required />
         </div>
 
         <div className="control-row">
-          <label htmlFor="email">Adresse courriel</label>
+          <label htmlFor="email">{t("inscription.email")}</label>
           <input type="email" id="email" name="email" required />
         </div>
 
         <div className="control-row">
-          <label htmlFor="password">Mot de passe</label>
+          <label htmlFor="password">{t("inscription.motDePasse")}</label>
           <input id="password" type="password" name="password" required />
         </div>
 
         <div className="control-row">
-          <label htmlFor="confirmPassword">Confirmation mot de passe</label>
+          <label htmlFor="confirmPassword">
+            {t("inscription.confirmation")}
+          </label>
           <input
             id="confirmPassword"
             type="password"
@@ -65,14 +69,12 @@ export default function Inscription() {
         </div>
 
         {passwordAreNotEqual && (
-          <p className="control-error">
-            Les mots de passe ne sont pas identiques.
-          </p>
+          <p className="control-error">{t("Inscription.erreurMotDePasse")}</p>
         )}
 
         <div className="form-actions">
           <button type="submit" className="btn-inscription">
-            S'inscrire
+            {t("inscription.sInscrire")}
           </button>
         </div>
       </form>

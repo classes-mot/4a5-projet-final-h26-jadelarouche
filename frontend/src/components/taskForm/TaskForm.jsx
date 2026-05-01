@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import "./TaskForm.css";
 
 const TaskForm = ({
@@ -24,14 +25,17 @@ const TaskForm = ({
   };
 
   const isAjouter = mode === "ajouter";
+  const { t } = useTranslation();
 
   return (
     <div className="task-form-wrapper">
       <form onSubmit={handleSubmit} className="task-form">
-        <h2>{isAjouter ? "Ajouter à l'horaire" : "Modifier à l'horaire"}</h2>
+        <h2>
+          {isAjouter ? t("taskForm.titreAjouter") : t("taskForm.titreModifier")}
+        </h2>
 
         <div className="task-control-row">
-          <label htmlFor="description">Description</label>
+          <label htmlFor="description">{t("taskForm.description")}</label>
           <input
             type="text"
             id="description"
@@ -42,7 +46,7 @@ const TaskForm = ({
         </div>
 
         <div className="task-control-row">
-          <label htmlFor="date">Date</label>
+          <label htmlFor="date">{t("taskForm.date")}</label>
           <input
             type="date"
             id="date"
@@ -53,7 +57,7 @@ const TaskForm = ({
         </div>
 
         <div className="task-control-row">
-          <label htmlFor="heureDebut">Heure de début</label>
+          <label htmlFor="heureDebut">{t("taskForm.heureDebut")}</label>
           <input
             type="time"
             id="heureDebut"
@@ -64,7 +68,7 @@ const TaskForm = ({
         </div>
 
         <div className="task-control-row">
-          <label htmlFor="heureFin">Heure de fin</label>
+          <label htmlFor="heureFin">{t("taskForm.heureFin")}</label>
           <input
             type="time"
             id="heureFin"
@@ -76,10 +80,10 @@ const TaskForm = ({
 
         <div className="task-form-actions">
           <button type="button" className="btn-annuler" onClick={onCancel}>
-            Annuler
+            {t("taskForm.annuler")}
           </button>
           <button type="submit" className="btn-task">
-            {isAjouter ? "Ajouter" : "Modifier"}
+            {isAjouter ? t("taskForm.ajouter") : t("taskForm.modifierBtn")}
           </button>
         </div>
       </form>

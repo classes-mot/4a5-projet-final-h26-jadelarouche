@@ -1,30 +1,26 @@
-// src/i18n/i18n.js
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
+import Backend from "i18next-http-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
 
-import frTranslation from "./locales/fr/common.json";
-import enTranslation from "./locales/en/common.json";
-
-const resources = {
-  fr: { translation: frTranslation },
-  en: { translation: enTranslation },
-};
-
 i18n
-  .use(LanguageDetector) // détecte automatiquement la langue du navigateur
-  .use(initReactI18next)
+  .use(Backend) // Charge les fichiers JSON depuis /public/locales
+  .use(LanguageDetector) // Détecte la langue du navigateur
+  .use(initReactI18next) // Intégration React
   .init({
-    resources,
-    fallbackLng: "fr",
+    lng: "fr", // Langue par défaut
+    fallbackLng: "en", // Langue de secours
+    debug: true,
     supportedLngs: ["fr", "en"],
+    load: "languageOnly",
     interpolation: {
-      escapeValue: false, // React gère déjà l'échappement
-    },
-    detection: {
-      order: ["localStorage", "navigator"],
-      caches: ["localStorage"],
+      escapeValue: false,
     },
   });
+
+// Met à jour l'attribut lang de la balise <html>
+i18n.on("languageChanged", (lng) => {
+  document.documentElement.lang = lng;
+});
 
 export default i18n;

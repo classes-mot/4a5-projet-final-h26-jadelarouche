@@ -1,9 +1,11 @@
 import React from "react";
 import "./Modal.css";
 import ReactDOM from "react-dom";
+import { useTranslation } from "react-i18next";
 
 const Modal = ({ isOpen, onClose, onConfirm, title, message }) => {
   if (!isOpen) return null;
+  const { t } = useTranslation();
 
   return ReactDOM.createPortal(
     <>
@@ -11,14 +13,14 @@ const Modal = ({ isOpen, onClose, onConfirm, title, message }) => {
       <div className="modal">
         <h3 className="modal-title">{title || "Confirmation"}</h3>
         <p className="modal-message">
-          {message || "Êtes-vous sûr de vouloir supprimer cette tâche ?"}
+          {message} || {t("modal.message")}
         </p>
         <div className="modal-actions">
           <button className="btn-modal-cancel" onClick={onClose}>
-            Annuler
+            {t("modal.annuler")}
           </button>
           <button className="btn-modal-confirm" onClick={onConfirm}>
-            Supprimer
+            {t("modal.confirmer")}
           </button>
         </div>
       </div>

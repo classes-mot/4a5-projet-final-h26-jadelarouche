@@ -2,8 +2,10 @@ import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Connexion.css";
 import { AuthContext } from "../context/auth-context";
+import { useTranslation } from "react-i18next";
 
 export default function Connexion() {
+  const { t } = useTranslation();
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -41,17 +43,17 @@ export default function Connexion() {
       navigate("/");
     } else {
       // Connexion échouée
-      setError("Email ou mot de passe incorrect.");
+      setError("connexion.erreur");
     }
   };
   return (
     <div className="connexion-wrapper">
       <form onSubmit={authSubmitHandler} className="connexion-form">
-        <h2>Connexion</h2>
-        {error && <p className="control-error">{error}</p>}
+        <h2>{t("connexion.titre")}</h2>
+        {error && <p className="control-error">{t(error)}</p>}
 
         <div className="control-row">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email">{t("connexion.email")}</label>
           <input
             type="email"
             id="email"
@@ -63,7 +65,7 @@ export default function Connexion() {
         </div>
 
         <div className="control-row">
-          <label htmlFor="password">Mot de passe</label>
+          <label htmlFor="password">{t("connexion.motDePasse")}</label>
           <input
             type="password"
             id="password"
@@ -78,14 +80,14 @@ export default function Connexion() {
 
         <div className="form-actions">
           <button type="submit" className="btn-connexion">
-            Se connecter
+            {t("connexion.seConnecter")}
           </button>
         </div>
 
         <p>
-          Pas encore de compte?{" "}
+          {t("connexion.pasDeCompte")}{" "}
           <a href="/inscription" style={{ color: "#4a90e2" }}>
-            S'inscrire
+            {t("connexion.sInscrire")}
           </a>
         </p>
       </form>

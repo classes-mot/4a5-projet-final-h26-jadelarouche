@@ -1,0 +1,59 @@
+{
+  "navigation": {
+    "accueil": "Accueil",
+    "connexion": "Connexion",
+    "inscription": "Inscription",
+    "deconnexion": "Déconnexion"
+  },
+  "accueil": {
+    "titre": "Agenda",
+    "nouvelleTache": "Nouvelle Tâche",
+    "aujourdhui": "Aujourd'hui",
+    "semaine": "Semaine"
+  },
+  "task": {
+    "modifier": "Modifier",
+    "supprimer": "Supprimer",
+    "aucuneTache": "Aucune tâche"
+  },
+  "taskForm": {
+    "titreAjouter": "Ajouter à l'horaire",
+    "titreModifier": "Modifier à l'horaire",
+    "description": "Description",
+    "date": "Date",
+    "heureDebut": "Heure de début",
+    "heureFin": "Heure de fin",
+    "annuler": "Annuler",
+    "ajouter": "Ajouter",
+    "modifierBtn": "Modifier"
+  },
+  "connexion": {
+    "titre": "Connexion",
+    "email": "Email",
+    "motDePasse": "Mot de passe",
+    "seConnecter": "Se connecter",
+    "pasDeCompte": "Pas encore de compte ?",
+    "sInscrire": "S'inscrire",
+    "erreur": "Email ou mot de passe incorrect."
+  },
+  "inscription": {
+    "titre": "Inscription",
+    "nomUtilisateur": "Nom d'utilisateur",
+    "email": "Adresse courriel",
+    "motDePasse": "Mot de passe",
+    "confirmation": "Confirmation mot de passe",
+    "sInscrire": "S'inscrire",
+    "erreurMotDePasse": "Les mots de passe ne sont pas identiques.",
+    "erreurEmail": "Cet email est déjà utilisé."
+  },
+  "erreur": {
+    "titre": "Erreur 404",
+    "message": "La page que vous recherchez n'existe pas."
+  },
+  "modal": {
+    "titre": "Supprimer la tâche",
+    "message": "Voulez-vous vraiment supprimer cette tâche?",
+    "annuler": "Annuler",
+    "confirmer": "Supprimer"
+  }
+}

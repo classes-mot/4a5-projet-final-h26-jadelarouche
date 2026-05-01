@@ -3,6 +3,7 @@ import NavLinks from "./NavLinks";
 import "./MainNavigation.css";
 import SideDrawer from "./SideDrawer";
 import Backdrop from "./Backdrop";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 const MainNavigation = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -24,7 +25,7 @@ const MainNavigation = () => {
           <nav className="main-nav">
             <NavLinks />
           </nav>
-
+          <LanguageSwitcher />
           <button className="menu-btn" onClick={() => setDrawerOpen(true)}>
             <span />
             <span />

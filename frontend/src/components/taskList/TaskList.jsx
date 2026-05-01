@@ -1,4 +1,5 @@
 import Task from "../task/Task";
+import { useTranslation } from "react-i18next";
 
 const TaskList = ({ tasks, view, onModifier, onSupprimer }) => {
   const getToday = () => {
@@ -22,7 +23,7 @@ const TaskList = ({ tasks, view, onModifier, onSupprimer }) => {
   const formatDayLabel = (dateStr) => {
     const date = new Date(dateStr + "T00:00:00");
     const today = getToday();
-    if (dateStr === today) return "Aujourd'hui";
+    if (dateStr === today) return t("accueil.aujourdhui");
     return date.toLocaleDateString("fr-CA", {
       weekday: "short",
       day: "numeric",
@@ -67,6 +68,8 @@ const TaskList = ({ tasks, view, onModifier, onSupprimer }) => {
           return acc;
         }, {});
 
+  const { t } = useTranslation();
+
   return (
     <div
       className={`days-container & ${view === "semaine" ? "semaine-layout" : ""}`}
@@ -76,7 +79,7 @@ const TaskList = ({ tasks, view, onModifier, onSupprimer }) => {
           <h2 className="day-title">{formatDayLabel(date)}</h2>
           <div className="task-grid">
             {dayTasks.length === 0 ? (
-              <p className="no-tasks">Aucune tâche</p>
+              <p className="no-tasks">{t("task.aucuneTache")}</p>
             ) : (
               dayTasks.map((task) => (
                 <Task
