@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "./Connexion.css";
 import { AuthContext } from "../context/auth-context";
 import { useTranslation } from "react-i18next";
@@ -86,9 +86,9 @@ export default function Connexion() {
 
         <p>
           {t("connexion.pasDeCompte")}{" "}
-          <a href="/inscription" style={{ color: "#4a90e2" }}>
+          <Link to="/inscription" style={{ color: "#4a90e2" }}>
             {t("connexion.sInscrire")}
-          </a>
+          </Link>
         </p>
       </form>
     </div>
