@@ -1,4 +1,4 @@
-import Tache from "../models/tache";
+import Tache from "../models/tache.js";
 
 // Ajouter une tâche protégé
 export const addTache = async (req, res) => {
