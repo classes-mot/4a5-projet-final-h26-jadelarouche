@@ -29,7 +29,7 @@ export const getTaches = async (req, res) => {
 // Obtenir une tâche par ID (protégé)
 export const getTacheById = async (req, res) => {
   try {
-    const tache = await Tache.finOne({
+    const tache = await Tache.findOne({
       _id: req.params.id,
       user: req.user.id, //On vérifie que la tache appartient à l'utilisateur
     });

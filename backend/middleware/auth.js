@@ -25,7 +25,7 @@ export const protect = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (error) {
-    console.error("Erreur de vérification du token :", error.message);
+    console.error("Erreur token :", error.message);
     res.status(401).json({
       message: "Token invalide ou expiré",
     });

@@ -22,8 +22,8 @@ app.use("*", (req, res) => {
 
 //Démarrage du serveur
 const PORT = process.env.PORT || 5000;
-app.listen(port, () => {
-  console.log(`Server démarré sur le port ${port}`);
+app.listen(PORT, () => {
+  console.log(`Server démarré sur le port ${PORT}`);
 });
 
 export default app;
