@@ -44,7 +44,8 @@
     "confirmation": "Confirmation mot de passe",
     "sInscrire": "S'inscrire",
     "erreurMotDePasse": "Les mots de passe ne sont pas identiques.",
-    "erreurEmail": "Cet email est déjà utilisé."
+    "erreurEmail": "Cet email est déjà utilisé.",
+    "succes": "Inscription réussie! Veuillez vous connecter."
   },
   "erreur": {
     "titre": "Erreur 404",

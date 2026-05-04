@@ -1,4 +1,5 @@
 import User from "../models/user.js";
+import jwt from "jsonwebtoken";
 
 // Inscription d'un nouvel utilisateur
 export const register = async (req, res) => {
@@ -38,17 +39,17 @@ export const login = async (req, res) => {
     const { email, motDePasse } = req.body;
 
     const user = await User.findOne({ email });
-    if (!user) {
+    if (!user || user.motDePasse !== motDePasse) {
       return res
         .status(401)
         .json({ message: "Email ou mot de passe incorrect" });
     }
 
-    if (user.motDePasse !== motDePasse) {
-      return res
-        .status(401)
-        .json({ message: "Email ou mot de passe incorrect" });
-    }
+    // Générer le token
+    const token = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET || "secret123",
+    );
 
     res.json({
       message: "Connexion réussie",
@@ -57,6 +58,7 @@ export const login = async (req, res) => {
         nom: user.nom,
         email: user.email,
       },
+      token,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });

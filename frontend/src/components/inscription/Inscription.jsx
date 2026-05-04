@@ -1,45 +1,75 @@
 import { useState } from "react";
 import "./Inscription.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext, API_BASE_URL } from "../context/auth-context";
+import { useContext } from "react";
 import { useTranslation } from "react-i18next";
 
 export default function Inscription() {
-  const [passwordAreNotEqual, setPasswordAreNotEqual] = useState(false);
   const { t } = useTranslation();
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  function handleSubmit(e) {
+  const [passwordAreNotEqual, setPasswordAreNotEqual] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setPasswordAreNotEqual(false);
+
     const fd = new FormData(e.target);
     const data = Object.fromEntries(fd.entries());
 
-    if (data.password !== data["confirmPassword"]) {
+    if (data.password !== data.confirmPassword) {
       setPasswordAreNotEqual(true);
       return;
     }
 
-    const users = JSON.parse(localStorage.getItem("users")) || [];
+    setLoading(true);
 
-    if (users.some((user) => user.email === data.email)) {
-      alert(t("inscription.erreurEmail"));
-      return;
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/users/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nom: data.username,
+          email: data.email,
+          motDePasse: data.password,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "erreur lors de l'inscription");
+      }
+
+      // Connecter directement l'utilisateur
+      if (result.user && result.token) {
+        login(result.user, result.token);
+        navigate("/accueil");
+      } else {
+        // Rediriger vers la connexion
+        alert(t("inscription.succes"));
+        navigate("/connexion");
+      }
+
+      e.target.reset();
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
     }
-
-    const newUser = {
-      username: data.username,
-      email: data.email,
-      password: data.password,
-    };
-
-    users.push(newUser);
-    localStorage.setItem("users", JSON.stringify(users));
-    e.target.reset();
-    setPasswordAreNotEqual(false);
-  }
+  };
 
   return (
     <div className="inscription-wrapper">
       <form onSubmit={handleSubmit} className="inscription-form">
         <h2>{t("inscription.titre")}</h2>
+
+        {error && <p className="control-error">{error}</p>}
 
         <div className="control-row">
           <label htmlFor="username">{t("inscription.nomUtilisateur")}</label>
@@ -73,10 +103,15 @@ export default function Inscription() {
         )}
 
         <div className="form-actions">
-          <button type="submit" className="btn-inscription">
-            {t("inscription.sInscrire")}
+          <button type="submit" className="btn-inscription" disabled={loading}>
+            {loading ? "Inscription en cours..." : t("inscription.sInscrire")}
           </button>
         </div>
+
+        <p>
+          Déjà un compte ?{" "}
+          <Link to="/connexion">{t("connexion.seConnecter")}</Link>
+        </p>
       </form>
     </div>
   );

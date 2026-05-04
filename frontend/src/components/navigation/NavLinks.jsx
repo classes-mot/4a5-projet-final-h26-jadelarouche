@@ -11,8 +11,6 @@ const NavLinks = () => {
 
   const handleLogout = () => {
     logout();
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("currentUser");
     navigate("/accueil");
   };
 
@@ -28,17 +26,15 @@ const NavLinks = () => {
       </li>
 
       {isLoggedIn ? (
-        <>
-          <li>
-            <NavLink
-              to="/accueil"
-              onClick={handleLogout}
-              className={({ isActive }) => (isActive ? "active" : "")}
-            >
-              {t("navigation.deconnexion")}
-            </NavLink>
-          </li>
-        </>
+        <li>
+          <NavLink
+            to="/accueil"
+            onClick={handleLogout}
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            {t("navigation.deconnexion")}
+          </NavLink>
+        </li>
       ) : (
         <>
           <li>

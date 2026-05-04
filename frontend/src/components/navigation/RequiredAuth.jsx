@@ -7,7 +7,7 @@ const RequiredAuth = () => {
 
   // Si l'utilisateur n'est pas connecté - on le redirige vers la page de connexion
   if (!isLoggedIn) {
-    return <Navigate to={"/connexion"} replace />;
+    return <Navigate to="/connexion" replace />;
   }
 
   // Si l'utilisateur est connecté - On affiche la page demandée

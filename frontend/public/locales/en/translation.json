@@ -44,7 +44,8 @@
     "confirmation": "Confirm password",
     "sInscrire": "Sign up",
     "erreurMotDePasse": "Passwords do not match.",
-    "erreurEmail": "This email is already in use."
+    "erreurEmail": "This email is already in use.",
+    "succes": "Sign up complete ! Please log in."
   },
   "erreur": {
     "titre": "Error 404",

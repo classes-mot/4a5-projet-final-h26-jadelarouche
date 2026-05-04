@@ -6,7 +6,7 @@ export const protect = (req, res, next) => {
   // Vérifier si le token est présent dans l'en-tête Authorization
   if (
     req.headers.authorization &&
-    req.headers.authorization.starsWith("Bearer")
+    req.headers.authorization.startsWith("Bearer")
   ) {
     token = req.headers.authorization.split(" ")[1];
   }

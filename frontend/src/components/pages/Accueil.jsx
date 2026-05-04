@@ -1,77 +1,102 @@
-import { useState, useContext, useEffect, useRef } from "react";
+import { useState, useContext, useEffect, useCallback } from "react";
 import "./Accueil.css";
 import Modal from "../context/Modal";
 import TaskForm from "../taskForm/TaskForm";
 import TaskList from "../taskList/TaskList";
-import { AuthContext } from "../context/auth-context";
+import { AuthContext, API_BASE_URL } from "../context/auth-context";
 import { useTranslation } from "react-i18next";
 
 const Accueil = () => {
   const { t } = useTranslation();
-  const { isLoggedIn, user } = useContext(AuthContext);
+  const { isLoggedIn, token } = useContext(AuthContext);
+
   const [view, setView] = useState("aujourdhui");
   const [showForm, setShowForm] = useState(false);
-  const [taskToEdit, setTaskToedit] = useState(null);
+  const [taskToEdit, setTaskToEdit] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState(null);
   const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  //Utilisation d'un ref
-  const isInitialized = useRef(false);
+  // Charger les tâches depuis l'API
+  const fetchTasks = useCallback(async () => {
+    if (!token) return;
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/taches`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setTasks(data);
+      } else {
+        console.error("Erreur serveur:", res.status);
+      }
+    } catch (error) {
+      console.error("Erreur chargement tâches:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [token]);
 
   // Charger les tâches quand l'utilisateur change (login/logout)
   useEffect(() => {
-    if (!isLoggedIn || !user?.email) {
-      setTasks([]);
-      isInitialized.current = false;
-      return;
-    }
-
-    const key = `tasks_${user.email}`;
-    try {
-      const saved = localStorage.getItem(key);
-      const parsed = saved ? JSON.parse(saved) : [];
-
-      console.log(`Tâches chargées depuis localStorage`);
-      console.table(parsed);
-
-      setTasks(parsed);
-      isInitialized.current = true;
-    } catch (e) {
-      console.error("Erreur lors du chargement des tâches :", e);
+    if (isLoggedIn && token) {
+      fetchTasks();
+    } else {
       setTasks([]);
     }
-  }, [isLoggedIn, user?.email]);
+  }, [isLoggedIn, token, fetchTasks]);
 
-  // Sauvegarder les tâches dans localStorage à chaque modification
-  useEffect(() => {
-    if (!isLoggedIn || !user?.email || !isInitialized.current) return;
-
-    // Protection ne pas sauvegarder si le tableau est vide
-    if (tasks.length === 0) {
-      console.log("Sauvegarde ignorée");
-      return;
-    }
-
-    const key = `tasks_${user.email}`;
+  const handleAjouter = async (formValues) => {
     try {
-      localStorage.setItem(key, JSON.stringify(tasks));
-      console.log(`Sauvegarde effectué`);
-    } catch (e) {
-      console.error("Erreur lors de la sauvegarde des tâches :", e);
-    }
-  }, [tasks, isLoggedIn, user?.email]);
+      const res = await fetch(`${API_BASE_URL}/api/taches`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formValues),
+      });
 
-  const handleAjouter = (formValues) => {
-    console.log("Ajout tache");
-    const newTask = { id: Date.now(), ...formValues };
-    setTasks((prev) => [...prev, newTask]);
-    setShowForm(false);
+      if (res.ok) {
+        fetchTasks();
+        setShowForm(false);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleModifier = (task) => {
-    setTaskToedit(task);
+    setTaskToEdit(task);
     setShowForm(true);
+  };
+
+  const handleUpdateTask = async (formValues) => {
+    if (!taskToEdit) return;
+    try {
+      const taskId = taskToEdit._id || taskToEdit.id;
+      const res = await fetch(`${API_BASE_URL}/api/taches/${taskId}`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formValues),
+      });
+
+      if (res.ok) {
+        fetchTasks();
+        setShowForm(false);
+        setTaskToEdit(null);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleSupprimerClick = (id) => {
@@ -79,14 +104,28 @@ const Accueil = () => {
     setModalOpen(true);
   };
 
-  const handleConfirmDelete = () => {
-    setTasks((prev) => prev.filter((t) => t.id !== taskToDelete));
-    setModalOpen(false);
-    setTaskToDelete(null);
+  const handleConfirmDelete = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/taches/${taskToDelete}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (res.ok) {
+        fetchTasks();
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setModalOpen(false);
+      setTaskToDelete(null);
+    }
   };
 
   const handleNouvelleClick = () => {
-    setTaskToedit(null);
+    setTaskToEdit(null);
     setShowForm(true);
   };
 
@@ -133,10 +172,10 @@ const Accueil = () => {
             <TaskForm
               mode={taskToEdit ? "modifier" : "ajouter"}
               initialValues={taskToEdit || {}}
-              onSubmit={handleAjouter}
+              onSubmit={taskToEdit ? handleUpdateTask : handleAjouter}
               onCancel={() => {
                 setShowForm(false);
-                setTaskToedit(null);
+                setTaskToEdit(null);
               }}
             />
           ) : (

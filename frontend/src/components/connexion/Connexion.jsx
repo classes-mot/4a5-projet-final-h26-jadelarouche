@@ -1,12 +1,12 @@
 import { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./Connexion.css";
-import { AuthContext } from "../context/auth-context";
+import { AuthContext, API_BASE_URL } from "../context/auth-context";
 import { useTranslation } from "react-i18next";
 
 export default function Connexion() {
   const { t } = useTranslation();
-  const auth = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [enteredValues, setEnteredValues] = useState({
@@ -16,41 +16,51 @@ export default function Connexion() {
 
   // Pour afficher un ,essage d'erreur
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (identifier, value) => {
-    setEnteredValues((prevValues) => ({
-      ...prevValues,
+    setEnteredValues((prev) => ({
+      ...prev,
       [identifier]: value,
     }));
   };
 
-  const authSubmitHandler = (event) => {
+  const authSubmitHandler = async (event) => {
     event.preventDefault();
+    setError("");
+    setLoading(true);
 
-    const { email, password } = enteredValues;
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/user/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: enteredValues.email,
+          motDePasse: enteredValues.password,
+        }),
+      });
 
-    const users = JSON.parse(localStorage.getItem("users")) || [];
+      const data = await response.json();
 
-    const foundUser = users.find(
-      (user) => user.email === email && user.password === password,
-    );
+      if (!response.ok) {
+        throw new Error(data.message || "Erreur de connexion");
+      }
 
-    if (foundUser) {
-      // Connexion réussie
-      auth.login(foundUser);
+      // data devrait contenir user et token
+      login(data.user, data.token);
 
-      setError("");
       navigate("/");
-    } else {
-      // Connexion échouée
-      setError("connexion.erreur");
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
   return (
     <div className="connexion-wrapper">
       <form onSubmit={authSubmitHandler} className="connexion-form">
         <h2>{t("connexion.titre")}</h2>
-        {error && <p className="control-error">{t(error)}</p>}
+        {error && <p className="control-error">{t("connexion.erreur")}</p>}
 
         <div className="control-row">
           <label htmlFor="email">{t("connexion.email")}</label>
@@ -79,8 +89,8 @@ export default function Connexion() {
         </div>
 
         <div className="form-actions">
-          <button type="submit" className="btn-connexion">
-            {t("connexion.seConnecter")}
+          <button type="submit" className="btn-connexion" disabled={loading}>
+            {loading ? "Connexion..." : t("connexion.seConnecter")}
           </button>
         </div>
 
