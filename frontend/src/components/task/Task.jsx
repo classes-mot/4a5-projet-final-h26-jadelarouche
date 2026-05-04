@@ -22,7 +22,7 @@ const Task = ({ task, onModifier, onSupprimer }) => {
           </button>
           <button
             className="btn-supprimer"
-            onClick={() => onSupprimer(task.id)}
+            onClick={() => onSupprimer(task._id || task.id)}
           >
             {t("task.supprimer")}
           </button>

@@ -3,9 +3,20 @@ import connectDB from "./util/db.js";
 import userRoutes from "./routes/usersRoutes.js";
 import tacheRoutes from "./routes/tachesRoutes.js";
 import "dotenv/config";
+import cors from "cors";
 
 // Middleware pour passer le JSON
 const app = express();
+
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "http://localhost:3000"],
+    credentials: true,
+    methods: ["GET", "POST", "PATCH", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
+
 app.use(express.json());
 
 // Connexion a la base de données
