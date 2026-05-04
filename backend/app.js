@@ -19,12 +19,22 @@ app.use(
 
 app.use(express.json());
 
+console.log("Middleware OK");
+
+app.get("/api/test", (req, res) => {
+  res.json({ message: "Backend fonctionne parfaitement !" });
+});
+
+console.log("Route /api/test ajoutée");
+
 // Connexion a la base de données
 connectDB();
 
 // Définition des routes
 app.use("/api/users", userRoutes);
 app.use("/api/taches", tacheRoutes);
+
+console.log("Toutes les routes sont montées !");
 
 // Gestion des routes non trouvées
 app.use((req, res) => {
